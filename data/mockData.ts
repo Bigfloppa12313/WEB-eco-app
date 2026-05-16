@@ -79,5 +79,44 @@ export const measurements: Measurement[] = [
       co: 1.5,
       o3: 30
     }
+  },
+  {
+  id: 3,
+  stationId: 1,
+  timestamp: "2026-05-16T11:00:00",
+  indicators: {
+    pm25: 22,
+    pm10: 30,
+    no2: 14,
+    so2: 4,
+    co: 0.6,
+    o3: 21
   }
+},
+{
+  id: 4,
+  stationId: 1,
+  timestamp: "2026-05-16T12:00:00",
+  indicators: {
+    pm25: 25,
+    pm10: 33,
+    no2: 16,
+    so2: 5,
+    co: 0.8,
+    o3: 23
+  }
+},
+{
+  id: 5,
+  stationId: 1,
+  timestamp: "2026-05-16T13:00:00",
+  indicators: {
+    pm25: 20,
+    pm10: 28,
+    no2: 12,
+    so2: 4,
+    co: 0.7,
+    o3: 20
+  }
+}
 ];
