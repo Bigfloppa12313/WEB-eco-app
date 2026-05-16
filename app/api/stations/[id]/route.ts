@@ -1,12 +1,18 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { stations } from "@/data/mockData";
 
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  context: {
+    params: Promise<{
+      id: string;
+    }>;
+  }
 ) {
+  const { id } = await context.params;
+
   const station = stations.find(
-    (s) => s.id === Number(params.id)
+    (s) => s.id === Number(id)
   );
 
   if (!station) {
