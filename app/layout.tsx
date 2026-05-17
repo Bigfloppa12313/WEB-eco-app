@@ -1,4 +1,6 @@
 import "./globals.css";
+import "leaflet/dist/leaflet.css";
+
 import Header from "@/components/Header";
 
 export default function RootLayout({
@@ -10,6 +12,7 @@ export default function RootLayout({
     <html lang="uk">
       <body>
         <Header />
+
         <main className="container">
           {children}
         </main>
