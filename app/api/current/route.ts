@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { stations, measurements } from "@/data/mockData";
+import { logger } from "@/lib/logger";
 
 export async function GET() {
+  try {
   // Повертає останні показники для кожної станції
   const latestPerStation = stations.map((s) => {
     const stationMeasurements = measurements.filter((m) => m.stationId === s.id);
@@ -24,6 +26,8 @@ export async function GET() {
       latest,
     };
   });
-
+  } catch (error) {
+    logger.error(error);
+  }
   return NextResponse.json({ success: true, data: latestPerStation });
 }

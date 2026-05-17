@@ -1,7 +1,9 @@
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
+import Analytics from "@/components/Analytics";
 
 import Header from "@/components/Header";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default function RootLayout({
   children,
@@ -12,10 +14,12 @@ export default function RootLayout({
     <html lang="uk">
       <body>
         <Header />
-
-        <main className="container">
-          {children}
-        </main>
+        <Analytics />
+         <ErrorBoundary>
+          <main className="container">
+            {children}
+          </main>
+        </ErrorBoundary>
       </body>
     </html>
   );

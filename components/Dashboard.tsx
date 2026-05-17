@@ -4,6 +4,9 @@ import { useMemo, useState } from "react";
 
 import Link from "next/link";
 
+import { event } from "@/lib/gtag";
+import { logger } from "@/lib/logger";
+
 import {
   MapContainer,
   TileLayer,
@@ -84,9 +87,15 @@ export default function Dashboard() {
       >
         <select
           value={filter}
-          onChange={(e) =>
-            setFilter(e.target.value)
-          }
+          onChange={(e) => {
+            setFilter(e.target.value);
+
+            event({
+              action: "apply_filter",
+              category: "filters",
+              label: e.target.value,
+            });
+          }}
           style={{
             padding: 10,
             borderRadius: 8,
@@ -190,10 +199,24 @@ export default function Dashboard() {
                         : 2,
                     }}
                     eventHandlers={{
-                      click: () =>
-                        setSelectedStation(
-                          station.id
-                        ),
+                     click: () => {
+                      setSelectedStation(station.id);
+                      logger.info(
+                        `Station selected: ${station.name}`
+                      );
+                      if (!station) {
+                        logger.warn(
+                        "Station not found"
+                        );
+                        return;
+                      }
+
+                      event({
+                      action: "map_click",
+                      category: "map",
+                      label: station.name,
+                      });
+                      },
                     }}
                   >
                     <Popup minWidth={220}>
