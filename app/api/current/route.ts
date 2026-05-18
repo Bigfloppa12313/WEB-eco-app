@@ -26,8 +26,8 @@ export async function GET() {
       latest,
     };
   });
+  return NextResponse.json({ success: true, data: latestPerStation });  
   } catch (error) {
     logger.error(error);
   }
-  return NextResponse.json({ success: true, data: latestPerStation });
 }

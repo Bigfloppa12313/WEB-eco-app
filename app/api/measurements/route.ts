@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { measurements } from "@/data/mockData";
+import { logger } from "@/lib/logger";
 
 function parseISODate(s: string | null) {
   if (!s) return null;
