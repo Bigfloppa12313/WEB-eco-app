@@ -2,23 +2,38 @@
 
 import { useMemo, useState } from "react";
 
-import Link from "next/link";
-
 import { event } from "@/lib/gtag";
-import { logger } from "@/lib/logger";
-
-import {
-  MapContainer,
-  TileLayer,
-  CircleMarker,
-  Popup,
-} from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
 
 import { stations, measurements } from "@/data/mockData";
 
-import Chart from "./Chart";
+import dynamic from "next/dynamic";
+
+const Chart = dynamic(
+  () => import("./Chart"),
+  {
+    ssr: false,
+
+    loading: () => (
+      <div
+        style={{
+          height: 400,
+          background: "#f0f0f0",
+          borderRadius: 10,
+        }}
+      />
+    ),
+  }
+);
+
+const MapComponent = dynamic(
+  () => import("./MapComponent"),
+  {
+    ssr: false,
+    loading: () => <p>Завантаження карти...</p>,
+  }
+);
 
 export default function Dashboard() {
   const [selectedStation, setSelectedStation] =
@@ -143,119 +158,17 @@ export default function Dashboard() {
             Інтерактивна карта
           </h2>
 
-          <MapContainer
-            center={[49, 31]}
-            zoom={6}
-            style={{
-              height: 800,
-              width: "100%",
-              borderRadius: "10px",
-              marginTop: 20,
-            }}
-          >
-            <TileLayer
-              attribution="OpenStreetMap"
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+           <MapComponent
+              filteredStations={filteredStations}
+              selectedStation={selectedStation}
+              getLatestPM25={getLatestPM25}
+              getMarkerColor={getMarkerColor}
+              setSelectedStation={setSelectedStation}
             />
-
-            {filteredStations.map(
-              (station) => {
-                const pm25 =
-                  getLatestPM25(
-                    station.id
-                  );
-
-                const isSelected =
-                  selectedStation ===
-                  station.id;
-
-                return (
-                  <CircleMarker
-                    key={station.id}
-                    center={[
-                      station.coordinates.lat,
-                      station.coordinates.lng,
-                    ]}
-                    radius={
-                      isSelected
-                        ? 18
-                        : 12
-                    }
-                    pathOptions={{
-                      color:
-                        getMarkerColor(
-                          pm25
-                        ),
-
-                      fillColor:
-                        getMarkerColor(
-                          pm25
-                        ),
-
-                      fillOpacity: 0.8,
-
-                      weight: isSelected
-                        ? 5
-                        : 2,
-                    }}
-                    eventHandlers={{
-                     click: () => {
-                      setSelectedStation(station.id);
-                      logger.info(
-                        `Station selected: ${station.name}`
-                      );
-                      if (!station) {
-                        logger.warn(
-                        "Station not found"
-                        );
-                        return;
-                      }
-
-                      event({
-                      action: "map_click",
-                      category: "map",
-                      label: station.name,
-                      });
-                      },
-                    }}
-                  >
-                    <Popup minWidth={220}>
-                      <div>
-                        <h3>
-                          {station.name}
-                        </h3>
-
-                        <p>
-                          Місто:{" "}
-                          {station.city}
-                        </p>
-
-                        <p>
-                          PM2.5: {pm25}
-                        </p>
-
-                        <Link
-                          href={`/stations/${station.id}`}
-                          style={{
-                            color: "blue",
-                            fontWeight:
-                              "bold",
-                          }}
-                        >
-                          Детальна
-                          інформація
-                        </Link>
-                      </div>
-                    </Popup>
-                  </CircleMarker>
-                );
-              }
-            )}
-          </MapContainer>
         </div>
 
         {/* Графіки */}
-        <div>
+        <div style={{ minHeight: 450 }}>
           {selectedStation ? (
             <Chart
               data={

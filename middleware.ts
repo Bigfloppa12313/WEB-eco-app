@@ -10,7 +10,7 @@ export function middleware(
 
   const duration =
     Date.now() - start;
-
+  if (process.env.NODE_ENV === "development") {
   console.log(
     JSON.stringify({
       level: "info",
@@ -25,6 +25,7 @@ export function middleware(
         .toISOString(),
     })
   );
+ }
 
   return response;
 }

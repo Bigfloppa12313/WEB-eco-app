@@ -7,7 +7,14 @@ export async function GET() {
   return NextResponse.json({
     success: true,
     data: stations
-  });
+  },
+  {
+    headers: {
+      "Cache-Control":
+        "public, s-maxage=60, stale-while-revalidate=120",
+    },
+  }
+  );
   } catch (error) {
         logger.error(error);
     }
