@@ -16,7 +16,7 @@ interface Props {
   getMarkerColor: (pm25: number) => string;
   setSelectedStation: (id: number) => void;
 }
-// Окремий компонент для карти
+// Окремий компонент для карти з дашборду
 export default function MapComponent({
   filteredStations,
   selectedStation,
