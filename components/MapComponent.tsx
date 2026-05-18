@@ -16,7 +16,7 @@ interface Props {
   getMarkerColor: (pm25: number) => string;
   setSelectedStation: (id: number) => void;
 }
-
+// Окремий компонент для карти
 export default function MapComponent({
   filteredStations,
   selectedStation,
